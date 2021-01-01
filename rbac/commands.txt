@@ -1,0 +1,27 @@
+// create namespace
+kubectl create ns finance
+
+// generate private key for user john
+openssl genrsa -out john.key 2048
+
+// create certificate signing request
+openssl req -new -key john.key -out john.csr -subj "/CN=john/O=finance"
+
+// create certificate
+openssl x509 -req -in john.csr -CA ~/.minikube/ca.crt -CAkey ~/.minikube/ca.key -CAcreateserial -out john.crt -days 365
+
+// option 1: create kubeconfig
+kubectl --kubeconfig john.kubeconfig config set-cluster minikube --server https://192.168.99.100:8443 --certificate-authority=~/.minikube/ca.cert
+
+// add user to the certificate
+kubectl --kubeconfig john1.kubeconfig config set-credentials john --client-certificate john.crt --client-key john.key 
+
+// set context
+kubectl --kubeconfig john1.kubeconfig config set-context john1.minikube --cluster minikube --namespace finance --user john
+
+// create role
+kubectl create role john-finance --verb=get,list --resource=pods --namespace=finance
+
+// create rolebinding
+kubectl create rolebinding john-finance-rolebinding --role=john-finance --user=john --namespace=finance
+
