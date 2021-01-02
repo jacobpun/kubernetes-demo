@@ -13,7 +13,7 @@ openssl x509 -req -in john.csr -CA ~/.minikube/ca.crt -CAkey ~/.minikube/ca.key 
 // option 1: create kubeconfig
 kubectl --kubeconfig john.kubeconfig config set-cluster minikube --server https://192.168.99.100:8443 --certificate-authority=~/.minikube/ca.cert
 
-// add user to the certificate
+// add user to config
 kubectl --kubeconfig john1.kubeconfig config set-credentials john --client-certificate john.crt --client-key john.key 
 
 // set context
