@@ -10,7 +10,7 @@ openssl req -new -key john.key -out john.csr -subj "/CN=john/O=finance"
 // create certificate
 openssl x509 -req -in john.csr -CA ~/.minikube/ca.crt -CAkey ~/.minikube/ca.key -CAcreateserial -out john.crt -days 365
 
-// option 1: create kubeconfig
+// create kubeconfig
 kubectl --kubeconfig john.kubeconfig config set-cluster minikube --server https://192.168.99.100:8443 --certificate-authority=~/.minikube/ca.cert
 
 // add user to config
